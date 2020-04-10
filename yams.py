@@ -196,3 +196,8 @@ class Game(object):
 			for player in self.players:
 				player.play()
 				break
+
+
+if __name__ == '__main__':
+	g = Game()
+	g.start()
