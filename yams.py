@@ -114,34 +114,46 @@ class Player(object):
 	def possible_scores(self, dice_state):
 		dice_state.sort()
 		possible_scores = {}
-		if self.numbers[0] is not None:
+		if self.numbers[0] is None:
 			possible_scores['[1] Ones'] = (dice_state == 1).astype(int).sum()
-		if self.numbers[1] is not None:
+		if self.numbers[1] is None:
 			possible_scores['[2] Twos'] = (dice_state == 2).astype(int).sum() * 2
-		# 	'[3] Threes': (dice_state == 3).astype(int).sum() * 3,
-		# 	'[4] Fours': (dice_state == 4).astype(int).sum() * 4,
-		# 	'[5] Fives': (dice_state == 5).astype(int).sum() * 5,
-		# 	'[6] Sixes': (dice_state == 6).astype(int).sum() * 6,
-		# 	'[7] Minimum': dice_state.sum(),
-		# 	'[8] Maximum': dice_state.sum(),
-		# 	'[9] Brelan': dice_state.sum() if self.is_brelan(dice_state) else 0,
-		# 	'[10] Full': 25 if len(set(dice_state)) == 2 and (dice_state == dice_state[0]).sum() in [2, 3] else 0,
-		# 	'[11] Square': dice_state.sum() if self.is_square(dice_state) else 0,
-		# 	'[12] Little suite': 30 if set(dice_state) in [
-		# 		{1, 2, 3, 4},
-		# 		{2, 3, 4, 5},
-		# 		{3, 4, 5, 6},
-		# 		{1, 2, 3, 4, 6},
-		# 		{1, 3, 4, 5, 6},
-		# 		{1, 2, 3, 4, 5},
-		# 		{2, 3, 4, 5, 6},
-		# 	] else 0,
-		# 	'[13] Big suite': 40 if set(dice_state) in [
-		# 		{1, 2, 3, 4, 5},
-		# 		{2, 3, 4, 5, 6},
-		# 	] else 0,
-		# 	'[14] Yams': 50 if len(set(dice_state)) == 1 else 0,
-		# }
+		if self.numbers[2] is None:
+			possible_scores['[3] Threes'] = (dice_state == 3).astype(int).sum() * 3
+		if self.numbers[3] is None:
+			possible_scores['[4] Fours'] = (dice_state == 4).astype(int).sum() * 4
+		if self.numbers[4] is None:
+			possible_scores['[5] Fives'] = (dice_state == 5).astype(int).sum() * 5
+		if self.numbers[5] is None:
+			possible_scores['[6] Sixes'] = (dice_state == 6).astype(int).sum() * 6
+		if self.minimum is None:
+			possible_scores['[7] Minimum'] = dice_state.sum()
+		if self.maximum is None:
+			possible_scores['[8] Maximum'] = dice_state.sum()
+		if self.brelan is None:
+			possible_scores['[9] Brelan'] = dice_state.sum() if self.is_brelan(dice_state) else 0
+		if self.full is None:
+			possible_scores['[10] Full'] = 25 if len(set(dice_state)) == 2 and (dice_state == dice_state[0]).sum() in [2, 3] else 0
+		if self.square is None:
+			possible_scores['[11] Square'] = dice_state.sum() if self.is_square(dice_state) else 0
+		if self.little_suite is None:
+			possible_scores['[12] Little suite'] = 30 if set(dice_state) in [
+				{1, 2, 3, 4},
+				{2, 3, 4, 5},
+				{3, 4, 5, 6},
+				{1, 2, 3, 4, 6},
+				{1, 3, 4, 5, 6},
+				{1, 2, 3, 4, 5},
+				{2, 3, 4, 5, 6},
+			] else 0
+		if self.big_suite is None:
+			possible_scores['[13] Big suite'] = 40 if set(dice_state) in [
+				{1, 2, 3, 4, 5},
+				{2, 3, 4, 5, 6},
+			] else 0
+		if self.yams is None:
+			possible_scores['[14] Yams'] = 50 if len(set(dice_state)) == 1 else 0
+		return possible_scores
 
 	def display_possible_scores(self, dice_state):
 		print('Possible scores:')
