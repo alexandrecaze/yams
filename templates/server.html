@@ -85,4 +85,15 @@
 	</div>
 
   </body>
+  <script>
+    function onClickGoButton() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', "/compute");
+    xhr.onload = function(evt) {
+		response = evt.target.response;
+    	console.log(response);
+    };
+    xhr.send(JSON.stringify({toto: 'tata'}));
+  }
+  </script>	
 </html>
