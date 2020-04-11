@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 import json
+import pandas as pd
 import numpy as np
 app = Flask(__name__)
 
@@ -11,11 +12,8 @@ def hello_world():
     dice_values = [DICE_MAPPING[dice] for dice in dice_state]
     player_names = ['Alex', 'Nico']
     coups = ['1', '2', '3', '4', '5', '6', 'Bonus', 'Min', 'Max', 'Brelan', 'Carré', 'Pte suite', 'Gde suite', 'Yams']
-    scores = np.zeros((len(coups), len(player_names)))
-    print(coups)
-    print(player_names)
-    print(scores)
-    return render_template('server.html', dice_values=dice_values, player_names=player_names, coups=coups, scores=scores)
+    scores = pd.DataFrame(data=np.zeros((len(coups), len(player_names)), dtype=int), columns=player_names, index=coups)
+    return render_template('server.html', dice_values=dice_values, player_names=player_names, coups=coups, scores=scores.to_html(classes=["table", "table-sm"], border=0, justify='left'))
 
 @app.route('/compute', methods=['POST'])
 def compute():

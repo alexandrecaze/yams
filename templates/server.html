@@ -4,195 +4,89 @@
     <!-- Place your kit's code here -->
     <script src="https://kit.fontawesome.com/9aa2e157d0.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </head>
 
   <body>
-  	<div class="container">
-  		<div class="row">
-		    <!-- Ready to use Font Awesome. Activate interlock. Dynotherms - connected. Infracells - up. Icons are go! -->
-			<div class="col border">
-				<div>
-					<div class="btn-group btn-group-toggle" data-toggle="buttons">
-					  <label class="btn btn-secondary active">
-					    <input type="radio" name="options" id="option1" autocomplete="off" checked> Player #1
-					  </label>
-					  <label class="btn btn-secondary">
-					    <input type="radio" name="options" id="option2" autocomplete="off"> Player #2
-					  </label>
-					</div>
-				</div>
-				<div>
-					<div class="btn-group btn-group-toggle" data-toggle="buttons">
-					  <label class="btn btn-secondary active">
-					    <input type="radio" name="options" id="option1" autocomplete="off" checked> Round #1
-					  </label>
-					  <label class="btn btn-secondary">
-					    <input type="radio" name="options" id="option2" autocomplete="off"> Round #2
-					  </label>
-					</div>
-				</div>
-					<div>
-						<i class="fas fa-3x fa-dice-one"></i>
-						<i class="fas fa-3x fa-dice-two"></i>
-						<i class="fas fa-3x fa-dice-three"></i>
-						<i class="fas fa-3x fa-dice-four"></i>
-						<i class="fas fa-3x fa-dice-five"></i>
-						<i class="fas fa-3x fa-dice-six"></i>
-					</div>
-					<div>
-						<i class="fas fa-3x fa-dice-one"></i>
-						<i class="fas fa-3x fa-dice-two"></i>
-						<i class="fas fa-3x fa-dice-three"></i>
-						<i class="fas fa-3x fa-dice-four"></i>
-						<i class="fas fa-3x fa-dice-five"></i>
-						<i class="fas fa-3x fa-dice-six"></i>
-					</div>
-					<div>
-						<i class="fas fa-3x fa-dice-one"></i>
-						<i class="fas fa-3x fa-dice-two"></i>
-						<i class="fas fa-3x fa-dice-three"></i>
-						<i class="fas fa-3x fa-dice-four"></i>
-						<i class="fas fa-3x fa-dice-five"></i>
-						<i class="fas fa-3x fa-dice-six"></i>
-					</div>
-					<div>
-						<i class="fas fa-3x fa-dice-one"></i>
-						<i class="fas fa-3x fa-dice-two"></i>
-						<i class="fas fa-3x fa-dice-three"></i>
-						<i class="fas fa-3x fa-dice-four"></i>
-						<i class="fas fa-3x fa-dice-five"></i>
-						<i class="fas fa-3x fa-dice-six"></i>
-					</div>
-					<div>
-						<i class="fas fa-3x fa-dice-one"></i>
-						<i class="fas fa-3x fa-dice-two"></i>
-						<i class="fas fa-3x fa-dice-three"></i>
-						<i class="fas fa-3x fa-dice-four"></i>
-						<i class="fas fa-3x fa-dice-five"></i>
-						<i class="fas fa-3x fa-dice-six"></i>
-					</div>	
-				<div>
-				<button onclick="onClickGoButton()", type="button" class="btn btn-link">Go</button>
-				</div>
-			</div>
-			 <!-- end box 1 -->
+    <div class="container">
+      <div class="row">
+	<!-- Ready to use Font Awesome. Activate interlock. Dynotherms - connected. Infracells - up. Icons are go! -->
+	<div class="col border">
+	  <div>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+	      <label class="btn btn-secondary active">
+		<input type="radio" name="options" id="option1" autocomplete="off" checked> Player #1
+	      </label>
+	      <label class="btn btn-secondary">
+		<input type="radio" name="options" id="option2" autocomplete="off"> Player #2
+	      </label>
+	    </div>
+	  </div>
+	  <div>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+	      <label class="btn btn-secondary active">
+		<input type="radio" name="options" id="option1" autocomplete="off" checked> Round #1
+	      </label>
+	      <label class="btn btn-secondary">
+		<input type="radio" name="options" id="option2" autocomplete="off"> Round #2
+	      </label>
+	    </div>
+	  </div>
+	  <div>
+	    <i class="fas fa-3x fa-dice-one"></i>
+	    <i class="fas fa-3x fa-dice-two"></i>
+	    <i class="fas fa-3x fa-dice-three"></i>
+	    <i class="fas fa-3x fa-dice-four"></i>
+	    <i class="fas fa-3x fa-dice-five"></i>
+	    <i class="fas fa-3x fa-dice-six"></i>
+	  </div>
+	  <div>
+	    <i class="fas fa-3x fa-dice-one"></i>
+	    <i class="fas fa-3x fa-dice-two"></i>
+	    <i class="fas fa-3x fa-dice-three"></i>
+	    <i class="fas fa-3x fa-dice-four"></i>
+	    <i class="fas fa-3x fa-dice-five"></i>
+	    <i class="fas fa-3x fa-dice-six"></i>
+	  </div>
+	  <div>
+	    <i class="fas fa-3x fa-dice-one"></i>
+	    <i class="fas fa-3x fa-dice-two"></i>
+	    <i class="fas fa-3x fa-dice-three"></i>
+	    <i class="fas fa-3x fa-dice-four"></i>
+	    <i class="fas fa-3x fa-dice-five"></i>
+	    <i class="fas fa-3x fa-dice-six"></i>
+	  </div>
+	  <div>
+	    <i class="fas fa-3x fa-dice-one"></i>
+	    <i class="fas fa-3x fa-dice-two"></i>
+	    <i class="fas fa-3x fa-dice-three"></i>
+	    <i class="fas fa-3x fa-dice-four"></i>
+	    <i class="fas fa-3x fa-dice-five"></i>
+	    <i class="fas fa-3x fa-dice-six"></i>
+	  </div>
+	  <div>
+	    <i class="fas fa-3x fa-dice-one"></i>
+	    <i class="fas fa-3x fa-dice-two"></i>
+	    <i class="fas fa-3x fa-dice-three"></i>
+	    <i class="fas fa-3x fa-dice-four"></i>
+	    <i class="fas fa-3x fa-dice-five"></i>
+	    <i class="fas fa-3x fa-dice-six"></i>
+	  </div>	
+	  <div>
+	    <button type="button" class="btn btn-link">Go</button>
+	  </div>
+	</div>
+	<!-- end box 1 -->
 
-			<div class="col border">
-				<table class="table table-sm">
-				  <thead>
-				    <tr>
-				      <th scope="col"></th>
-				      <th scope="col">Alex</th>
-				      <th scope="col">Pedro</th>
-				      <th scope="col">Nico</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">2</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">3</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">4</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">5</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">6</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">Bonus</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">Min</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">Max</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">Brelan</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">Pte suite</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">Gde suite</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">Full</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">Carré</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">Yams</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				    <tr>
-				      <th scope="row">Total</th>
-				      <td></td>
-				      <td></td>
-				      <td></td>
-				    </tr>
-				  </tbody>
-				</table>
-			</div>
-	</body>
-<script>
-  function onClickGoButton() {
+	<div class="col border">
+          {{ scores | safe }}
+	</div>
+
+  </body>
+  <script>
+    function onClickGoButton() {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', "/compute");
     xhr.onload = function(evt) {
@@ -200,6 +94,6 @@
     	console.log(response);
     };
     xhr.send(JSON.stringify({toto: 'tata'}));
-}
-</script>	
+  }
+  </script>	
 </html>
