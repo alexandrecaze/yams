@@ -2,7 +2,6 @@
 <html>
   <head>
     <!-- Place your kit's code here -->
-    <script src="https://kit.fontawesome.com/9aa2e157d0.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -10,9 +9,9 @@
   </head>
 
   <body>
-    <div class="container">
-      <div class="row">
-	<!-- Ready to use Font Awesome. Activate interlock. Dynotherms - connected. Infracells - up. Icons are go! -->
+
+  <div class="container">
+  <div class="row">
 	<div class="col border">
 	  <div>
 	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -80,43 +79,84 @@
 	</div>
 	<!-- end box 1 -->
 
-	<div class="col border" id="scoreTable">
+	<div class="col border" id="scoreTableDiv">
+			{{ scores | safe }}
+	</div>
 	</div>
 
-  </body>
+  	<div class="row" style='text-align: center; margin-top: 20px; margin-bottom: 30px;'>
+			<div class="col">
+				<form action="#" id="newPlayerForm">
+					<input type="text" id="fname" name="fname">
+					<input type="button" value="Add player" onclick="addPlayer()">
+				</form>
+			</div>		
+		</div>
+	</div>
+
   <script>
+  	var players = ['Nico', 'Ped', 'Alex'];
+  	var coups = ['1', '2', '3', '4', '5', '6', 'Min', 'Max', 'Brelan', 'Carré', 'Pte suite', 'Gde suite', 'Yams', 'Bonus', 'Total']
+
+  	function addPlayer() {
+  		var playerName = document.getElementById('fname').value;
+  		players.push(playerName);
+  		resetTable();
+  	}
+
+	  document.getElementById('newPlayerForm').addEventListener('submit', function(e) {
+	    addPlayer();
+	    e.preventDefault();
+		}, false);
+
     function onClickGoButton() {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "/compute");
         xhr.onload = function(evt) {
             response = evt.target.response;
-    	    console.log(response);
         };
         xhr.send(JSON.stringify({toto: 'tata'}));
     }
-    function tableCreate(){
-        var tableDiv = document.getElementById("scoreTable"),
-        tbl  = document.createElement('table');
-        tbl.style.width  = '100px';
-        tbl.style.border = '1px solid black';
 
-        for(var i = 0; i < 3; i++){
-            var tr = tbl.insertRow();
-            for(var j = 0; j < 2; j++){
-                if(i == 2 && j == 1){
-                    break;
-                } else {
-                    var td = tr.insertCell();
-                    td.appendChild(document.createTextNode('Cell'));
-                    td.style.border = '1px solid black';
-                    if(i == 1 && j == 1){
-                        td.setAttribute('rowSpan', '2');
-                    }
-                }
-            }
+    function resetTable(){
+    		var tableDiv = document.getElementById("scoreTableDiv");
+        tableDiv.innerHTML = '';
+        tbl = document.createElement('table');
+        tbl.classList.add('table');
+        tbl.classList.add('table-sm');
+        tbl.id = 'scoreTable';
+
+        // thead
+        thead = document.createElement('thead');
+        var tr = document.createElement('tr');
+        thead.appendChild(tr);
+        var th = document.createElement('th');
+        tr.appendChild(th);          
+        for (var j = 0; j < players.length; j++) {
+       		var th = document.createElement('th');
+        	th.appendChild(document.createTextNode(players[j]));
+        	tr.appendChild(th);
         }
+        tbl.appendChild(thead);
+
+        // tbody
+        tbody = document.createElement('tbody');
+        for (var i = 0; i < coups.length; i++){
+          var tr = document.createElement('tr');
+          var th = document.createElement('th');
+          th.appendChild(document.createTextNode(coups[i]));
+          tr.appendChild(th);
+          for (var j = 0; j < players.length; j++){
+            var td = document.createElement('td');
+            td.appendChild(document.createTextNode(0));
+            tr.appendChild(td);
+          }
+          tbody.appendChild(tr);
+        }
+        tbl.appendChild(tbody);
         tableDiv.appendChild(tbl);
     }
-    tableCreate()
+
+    resetTable()
   </script>
 </html>
