@@ -5,3 +5,6 @@ Install requirements
 
 Play
 `python yams.py`
+
+Launch server
+`python server.py`
