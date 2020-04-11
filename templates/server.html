@@ -75,7 +75,7 @@
 						<i class="fas fa-3x fa-dice-six"></i>
 					</div>	
 				<div>
-				<button onclick="compute()", type="button" class="btn btn-link">Go</button>
+				<button onclick="onClickGoButton()", type="button" class="btn btn-link">Go</button>
 				</div>
 			</div>
 			 <!-- end box 1 -->
@@ -192,11 +192,12 @@
 			</div>
 	</body>
 <script>
-  function compute() {
+  function onClickGoButton() {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', "/compute");
     xhr.onload = function(evt) {
-    	console.log(evt.target.response);
+			response = evt.target.response;
+    	console.log(response);
     };
     xhr.send(JSON.stringify({toto: 'tata'}));
 }
