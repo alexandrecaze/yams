@@ -23,49 +23,13 @@
 	      </label>
 	    </div>
 	  </div>
-	  <div>
-	    <i class="fas fa-3x fa-dice-one"></i>
-	    <i class="fas fa-3x fa-dice-two"></i>
-	    <i class="fas fa-3x fa-dice-three"></i>
-	    <i class="fas fa-3x fa-dice-four"></i>
-	    <i class="fas fa-3x fa-dice-five"></i>
-	    <i class="fas fa-3x fa-dice-six"></i>
-	  </div>
-	  <div>
-	    <i class="fas fa-3x fa-dice-one"></i>
-	    <i class="fas fa-3x fa-dice-two"></i>
-	    <i class="fas fa-3x fa-dice-three"></i>
-	    <i class="fas fa-3x fa-dice-four"></i>
-	    <i class="fas fa-3x fa-dice-five"></i>
-	    <i class="fas fa-3x fa-dice-six"></i>
-	  </div>
-	  <div>
-	    <i class="fas fa-3x fa-dice-one"></i>
-	    <i class="fas fa-3x fa-dice-two"></i>
-	    <i class="fas fa-3x fa-dice-three"></i>
-	    <i class="fas fa-3x fa-dice-four"></i>
-	    <i class="fas fa-3x fa-dice-five"></i>
-	    <i class="fas fa-3x fa-dice-six"></i>
-	  </div>
-	  <div>
-	    <i class="fas fa-3x fa-dice-one"></i>
-	    <i class="fas fa-3x fa-dice-two"></i>
-	    <i class="fas fa-3x fa-dice-three"></i>
-	    <i class="fas fa-3x fa-dice-four"></i>
-	    <i class="fas fa-3x fa-dice-five"></i>
-	    <i class="fas fa-3x fa-dice-six"></i>
-	  </div>
-	  <div>
-	    <i class="fas fa-3x fa-dice-one"></i>
-	    <i class="fas fa-3x fa-dice-two"></i>
-	    <i class="fas fa-3x fa-dice-three"></i>
-	    <i class="fas fa-3x fa-dice-four"></i>
-	    <i class="fas fa-3x fa-dice-five"></i>
-	    <i class="fas fa-3x fa-dice-six"></i>
-	  </div>	
+	  <div id=dieDiv></div>
+	  
 	  <div>
 	    <button onclick="onClickGoButton()" type="button" class="btn btn-link">Go</button>
 	  </div>
+
+	  <div id=resultsDiv></div>
 	</div>
 	<!-- end box 1 -->
 
@@ -87,7 +51,8 @@
   	var players = [];
   	var nextPlayerIndex = 0;
   	var coups = ['1', '2', '3', '4', '5', '6', 'Min', 'Max', 'Brelan', 'Carré', 'Pte suite', 'Gde suite', 'Yams', 'Bonus', 'Total']
- 
+ 		var selectedDie = [null, null, null, null, null];
+
  		class Player {
  			constructor(name) {
  				this.name = name
@@ -113,8 +78,9 @@
         xhr.onload = function(evt) {
             response = evt.target.response;
             console.log(response);
+            displayResults(response);
         };
-        xhr.send(JSON.stringify({toto: 'tata'}));
+        xhr.send(JSON.stringify({selectedDie: selectedDie}));
     }
 
     function setNextPlayer(j) {
@@ -124,6 +90,66 @@
 
     function setScore(player, coup, value) {
     	players[player].scores[coup] = Number(value);
+    }
+
+    function selectDie(diePosition, dieValue){
+    	if (selectedDie[diePosition] === dieValue) {
+    		selectedDie[diePosition] = null
+    	} else {
+    		selectedDie[diePosition] = dieValue
+    	}
+    	drawDie();
+    }
+
+    function displayResults(results){
+    	var resultsDiv = document.getElementById("resultsDiv");
+    	resultsDiv.innerHTML = '';
+    	var yamsH3 = document.createElement('h3');
+    	results = JSON.parse(results);
+    	// yamsH3.innerHTML = 'Proba to get a Yams in one throw: ' + results['proba_yams_one_throw'].toFixed(2) + '%'
+    	yamsH3.innerHTML = 'Proba to get a Yams in one throw: 1 / ' + (100 / results['proba_yams_one_throw']).toFixed(0)
+    	resultsDiv.appendChild(yamsH3);
+    }
+
+    function drawDie() {
+  		var dieDiv = document.getElementById("dieDiv");
+      dieDiv.innerHTML = '';
+      var imageUrl = [
+      	'{{ url_for('static', filename='img/one.png') }}',
+      	'{{ url_for('static', filename='img/two.png') }}',
+      	'{{ url_for('static', filename='img/three.png') }}',
+      	'{{ url_for('static', filename='img/four.png') }}',
+      	'{{ url_for('static', filename='img/five.png') }}',
+      	'{{ url_for('static', filename='img/six.png') }}'
+      ];
+      var imageUrlBlue = [
+      	'{{ url_for('static', filename='img/one_b.png') }}',
+      	'{{ url_for('static', filename='img/two_b.png') }}',
+      	'{{ url_for('static', filename='img/three_b.png') }}',
+      	'{{ url_for('static', filename='img/four_b.png') }}',
+      	'{{ url_for('static', filename='img/five_b.png') }}',
+      	'{{ url_for('static', filename='img/six_b.png') }}'
+      ];
+      
+      for (var i=0; i < 5; i++){
+      	var div = document.createElement('div');
+	      for (var j = 0; j < imageUrl.length; j++) {
+	      	var img = document.createElement('img');
+	      	img.setAttribute('width', '60px');
+	      	if (selectedDie[i] == j) {
+		      	img.setAttribute('src', imageUrlBlue[j]);
+	      	} else {
+	      		img.setAttribute('src', imageUrl[j]);
+	      	}
+	      	img.dicePosition = i;
+	      	img.diceValue = j;
+	      	img.onclick = function() {
+       			selectDie(this.dicePosition, this.diceValue);
+       		}
+		      div.appendChild(img);
+	      }
+	      dieDiv.appendChild(div);
+      }
     }
 
     function drawTable(){
@@ -192,6 +218,8 @@
     	}
 		}	    
 
-    drawTable()
+    drawTable();
+    drawDie();
+
   </script>
 </html>
