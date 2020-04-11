@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, request, render_template
+import json
 import numpy as np
 app = Flask(__name__)
 
@@ -15,6 +16,12 @@ def hello_world():
     print(player_names)
     print(scores)
     return render_template('server.html', dice_values=dice_values, player_names=player_names, coups=coups, scores=scores)
+
+@app.route('/compute', methods=['POST'])
+def compute():
+	data = request.get_data()
+	print(json.loads(data))
+	return json.dumps({'coucou': 'toi'})
 
 if __name__ == '__main__':
   app.run()
