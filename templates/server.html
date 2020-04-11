@@ -16,16 +16,6 @@
 	  <div>
 	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
 	      <label class="btn btn-secondary active">
-		<input type="radio" name="options" id="option1" autocomplete="off" checked> Player #1
-	      </label>
-	      <label class="btn btn-secondary">
-		<input type="radio" name="options" id="option2" autocomplete="off"> Player #2
-	      </label>
-	    </div>
-	  </div>
-	  <div>
-	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-	      <label class="btn btn-secondary active">
 		<input type="radio" name="options" id="option1" autocomplete="off" checked> Round #1
 	      </label>
 	      <label class="btn btn-secondary">
@@ -80,7 +70,6 @@
 	<!-- end box 1 -->
 
 	<div class="col border" id="scoreTableDiv">
-			{{ scores | safe }}
 	</div>
 	</div>
 
@@ -88,14 +77,14 @@
 			<div class="col">
 				<form action="#" id="newPlayerForm">
 					<input type="text" id="fname" name="fname">
-					<input type="button" value="Add player" onclick="addPlayer()">
+					<input type="button" value="Ajouter un joueur" onclick="addPlayer()">
 				</form>
 			</div>		
 		</div>
 	</div>
 
   <script>
-  	var players = ['Nico', 'Ped', 'Alex'];
+  	var players = [];
   	var coups = ['1', '2', '3', '4', '5', '6', 'Min', 'Max', 'Brelan', 'Carré', 'Pte suite', 'Gde suite', 'Yams', 'Bonus', 'Total']
 
   	function addPlayer() {
@@ -114,13 +103,16 @@
         xhr.open('POST', "/compute");
         xhr.onload = function(evt) {
             response = evt.target.response;
+            console.log(response);
         };
         xhr.send(JSON.stringify({toto: 'tata'}));
     }
 
     function resetTable(){
-    		var tableDiv = document.getElementById("scoreTableDiv");
-        tableDiv.innerHTML = '';
+  		var tableDiv = document.getElementById("scoreTableDiv");
+      tableDiv.innerHTML = '';
+
+      if (players.length > 0) {
         tbl = document.createElement('table');
         tbl.classList.add('table');
         tbl.classList.add('table-sm');
@@ -155,7 +147,10 @@
         }
         tbl.appendChild(tbody);
         tableDiv.appendChild(tbl);
-    }
+    	} else {
+				tableDiv.appendChild(document.createTextNode('Ajoute des joueurs wesh'));
+    	}
+		}	    
 
     resetTable()
   </script>
