@@ -80,20 +80,44 @@
 	</div>
 	<!-- end box 1 -->
 
-	<div class="col border">
-          {{ scores | safe }}
+	<div class="col border" id="scoreTable">
+          <!-- {{ scores | safe }} -->
 	</div>
 
   </body>
   <script>
     function onClickGoButton() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', "/compute");
-    xhr.onload = function(evt) {
-		response = evt.target.response;
-    	console.log(response);
-    };
-    xhr.send(JSON.stringify({toto: 'tata'}));
-  }
-  </script>	
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "/compute");
+        xhr.onload = function(evt) {
+            response = evt.target.response;
+    	    console.log(response);
+        };
+        xhr.send(JSON.stringify({toto: 'tata'}));
+    }
+    function tableCreate(){
+        var tableDiv = document.getElementById("scoreTable"),
+        tbl  = document.createElement('table');
+        tbl.style.width  = '100px';
+        tbl.style.border = '1px solid black';
+
+        for(var i = 0; i < 3; i++){
+            var tr = tbl.insertRow();
+            for(var j = 0; j < 2; j++){
+                if(i == 2 && j == 1){
+                    break;
+                } else {
+                    var td = tr.insertCell();
+                    td.appendChild(document.createTextNode('Cell'));
+                    td.style.border = '1px solid black';
+                    if(i == 1 && j == 1){
+                        td.setAttribute('rowSpan', '2');
+                    }
+                }
+            }
+        }
+        tableDiv.appendChild(tbl);
+    }
+    tableCreate()
+  </script>
 </html>
