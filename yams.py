@@ -3,6 +3,23 @@ import os
 import pandas as pd
 import re
 
+DISPLAY_NAMES = {
+	1: '[1] Ones',
+	2: '[2] Twos',
+	3: '[3] Threes',
+	4: '[4] Fours',
+	5: '[5] Fives',
+	6: '[6] Sixes',
+	7: '[7] Minimum',
+	8: '[8] Maximum',
+	9: '[9] Brelan',
+	10: '[10] Full',
+	11: '[11] Square',
+	12: '[12] Little suite',
+	13: '[13] Big suite',
+	14: '[14] Yams',	
+	15: '[15] Chance',
+}
 
 def clear_and_print(coucou):
 	os.system('clear')
@@ -24,7 +41,8 @@ class Player(object):
 		big_suite=None,
 		full=None,
 		square=None,
-		yams=None):
+		yams=None,
+		chance=None):
 		self.name = name
 		self.numbers = numbers
 		self.minimum = minimum
@@ -35,6 +53,7 @@ class Player(object):
 		self.full = full
 		self.square = square
 		self.yams = yams
+		self.chance = chance
 
 	def __str__(self):
 		return self.name
@@ -49,7 +68,8 @@ class Player(object):
 		+ coalesce(self.big_suite) \
 		+ coalesce(self.full) \
 		+ coalesce(self.square) \
-		+ coalesce(self.yams)
+		+ coalesce(self.yams) \
+		+ coalesce(self.chance)
 
 	@property
 	def bonus(self):
@@ -81,6 +101,9 @@ class Player(object):
 	
 	def score_yams(self):
 		self.yams = 50
+
+	def score_chance(self, score):
+		self.chance = score
 
 	def chose(self):
 		choice = ''
@@ -115,29 +138,29 @@ class Player(object):
 		dice_state.sort()
 		possible_scores = {}
 		if self.numbers[0] is None:
-			possible_scores['[1] Ones'] = (dice_state == 1).astype(int).sum()
+			possible_scores[DISPLAY_NAMES[1]] = (dice_state == 1).astype(int).sum()
 		if self.numbers[1] is None:
-			possible_scores['[2] Twos'] = (dice_state == 2).astype(int).sum() * 2
+			possible_scores[DISPLAY_NAMES[2]] = (dice_state == 2).astype(int).sum() * 2
 		if self.numbers[2] is None:
-			possible_scores['[3] Threes'] = (dice_state == 3).astype(int).sum() * 3
+			possible_scores[DISPLAY_NAMES[3]] = (dice_state == 3).astype(int).sum() * 3
 		if self.numbers[3] is None:
-			possible_scores['[4] Fours'] = (dice_state == 4).astype(int).sum() * 4
+			possible_scores[DISPLAY_NAMES[4]] = (dice_state == 4).astype(int).sum() * 4
 		if self.numbers[4] is None:
-			possible_scores['[5] Fives'] = (dice_state == 5).astype(int).sum() * 5
+			possible_scores[DISPLAY_NAMES[5]] = (dice_state == 5).astype(int).sum() * 5
 		if self.numbers[5] is None:
-			possible_scores['[6] Sixes'] = (dice_state == 6).astype(int).sum() * 6
+			possible_scores[DISPLAY_NAMES[6]] = (dice_state == 6).astype(int).sum() * 6
 		if self.minimum is None:
-			possible_scores['[7] Minimum'] = dice_state.sum()
+			possible_scores[DISPLAY_NAMES[7]] = dice_state.sum()
 		if self.maximum is None:
-			possible_scores['[8] Maximum'] = dice_state.sum()
+			possible_scores[DISPLAY_NAMES[8]] = dice_state.sum()
 		if self.brelan is None:
-			possible_scores['[9] Brelan'] = dice_state.sum() if self.is_brelan(dice_state) else 0
+			possible_scores[DISPLAY_NAMES[9]] = dice_state.sum() if self.is_brelan(dice_state) else 0
 		if self.full is None:
-			possible_scores['[10] Full'] = 25 if len(set(dice_state)) == 2 and (dice_state == dice_state[0]).sum() in [2, 3] else 0
+			possible_scores[DISPLAY_NAMES[10]] = 25 if len(set(dice_state)) == 2 and (dice_state == dice_state[0]).sum() in [2, 3] else 0
 		if self.square is None:
-			possible_scores['[11] Square'] = dice_state.sum() if self.is_square(dice_state) else 0
+			possible_scores[DISPLAY_NAMES[11]] = dice_state.sum() if self.is_square(dice_state) else 0
 		if self.little_suite is None:
-			possible_scores['[12] Little suite'] = 30 if set(dice_state) in [
+			possible_scores[DISPLAY_NAMES[12]] = 30 if set(dice_state) in [
 				{1, 2, 3, 4},
 				{2, 3, 4, 5},
 				{3, 4, 5, 6},
@@ -147,19 +170,26 @@ class Player(object):
 				{2, 3, 4, 5, 6},
 			] else 0
 		if self.big_suite is None:
-			possible_scores['[13] Big suite'] = 40 if set(dice_state) in [
+			possible_scores[DISPLAY_NAMES[13]] = 40 if set(dice_state) in [
 				{1, 2, 3, 4, 5},
 				{2, 3, 4, 5, 6},
 			] else 0
 		if self.yams is None:
-			possible_scores['[14] Yams'] = 50 if len(set(dice_state)) == 1 else 0
+			possible_scores[DISPLAY_NAMES[14]] = 50 if len(set(dice_state)) == 1 else 0
+		if self.chance is None:
+			possible_scores[DISPLAY_NAMES[15]] = dice_state.sum()
 		return possible_scores
 
-	def display_possible_scores(self, dice_state):
+	def display_possible_scores(self, dice_state, chose=False):
 		print('Possible scores:')
-		for key, value in self.possible_scores(dice_state.copy()).items():
+		possible_scores = self.possible_scores(dice_state.copy())
+		for key, value in possible_scores.items():
 			print(key, value)
-
+		if chose:
+			choice = input('What\'s it gonna be ?')
+			print(choice)
+			import pdb
+			pdb.set_trace()
 
 	def play(self):
 		clear_and_print('======')
@@ -178,13 +208,13 @@ class Player(object):
 		print('{name}: Final throw:'.format(name=self.name))
 		dice_state = self.throw(choice, dice_state)
 		clear_and_print(dice_state)
-		self.display_possible_scores(dice_state)
+		self.display_possible_scores(dice_state, chose=True)
 		input()
 		
 
 class Game(object):
 
-	def __init__(self, player_names=['Billy', 'Joel']):
+	def __init__(self, player_names=['Billy']):
 		self.players = [Player(player_name) for player_name in player_names]
 		self.throws = {player.name: np.zeros((14, 5)) for player in self.players}
 		self.play_count = 0
