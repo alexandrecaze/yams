@@ -10,7 +10,7 @@
 
   <body>
 
-  <div class="container">
+  <div class="container" style="margin-top:20px;">
   <div class="row">
 	<div class="col border">
 	  <div>
@@ -85,12 +85,21 @@
 
   <script>
   	var players = [];
+  	var nextPlayerIndex = 0;
   	var coups = ['1', '2', '3', '4', '5', '6', 'Min', 'Max', 'Brelan', 'Carré', 'Pte suite', 'Gde suite', 'Yams', 'Bonus', 'Total']
+ 
+ 		class Player {
+ 			constructor(name) {
+ 				this.name = name
+ 				this.scores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+ 			}
+ 		}
 
   	function addPlayer() {
   		var playerName = document.getElementById('fname').value;
-  		players.push(playerName);
-  		resetTable();
+  		players.push(new Player(playerName));
+  		document.getElementById('fname').value = '';
+  		drawTable();
   	}
 
 	  document.getElementById('newPlayerForm').addEventListener('submit', function(e) {
@@ -108,7 +117,16 @@
         xhr.send(JSON.stringify({toto: 'tata'}));
     }
 
-    function resetTable(){
+    function setNextPlayer(j) {
+    	nextPlayerIndex = j;
+    	drawTable();
+    }
+
+    function setScore(player, coup, value) {
+    	players[player].scores[coup] = Number(value);
+    }
+
+    function drawTable(){
   		var tableDiv = document.getElementById("scoreTableDiv");
       tableDiv.innerHTML = '';
 
@@ -126,7 +144,14 @@
         tr.appendChild(th);          
         for (var j = 0; j < players.length; j++) {
        		var th = document.createElement('th');
-        	th.appendChild(document.createTextNode(players[j]));
+       		th.playerId = j;
+       		if (nextPlayerIndex == j) {
+       			th.classList.add('bg-primary');
+       		}
+       		th.onclick = function() {
+       			setNextPlayer(this.playerId);
+       		}
+        	th.appendChild(document.createTextNode(players[j].name));
         	tr.appendChild(th);
         }
         tbl.appendChild(thead);
@@ -140,7 +165,22 @@
           tr.appendChild(th);
           for (var j = 0; j < players.length; j++){
             var td = document.createElement('td');
-            td.appendChild(document.createTextNode(0));
+            var inputCellScore = document.createElement('input');
+       			inputCellScore.style = "border:0;"
+       			inputCellScore.value = players[j].scores[i];
+       			inputCellScore.playerId = j;
+       			inputCellScore.coupId = i;
+            if (nextPlayerIndex == j) {
+       				td.classList.add('bg-primary');
+       				inputCellScore.classList.add('bg-primary');
+       			}
+       			inputCellScore.addEventListener('keyup', function(event){
+       				if (event.key === 'Enter') {
+       					console.log(this.value);
+       					setScore(this.playerId, this.coupId, this.value);
+       				}
+       			})
+            td.appendChild(inputCellScore);
             tr.appendChild(td);
           }
           tbody.appendChild(tr);
@@ -152,6 +192,6 @@
     	}
 		}	    
 
-    resetTable()
+    drawTable()
   </script>
 </html>
