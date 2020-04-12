@@ -20,12 +20,7 @@ COUPS = {
 
 @app.route('/')
 def hello_world():
-    die_state = np.random.randint(1, 7, 5)
-    dice_values = [DICE_MAPPING[dice] for dice in die_state]
-    player_names = ['Alex', 'Nico']
-    coups = ['1', '2', '3', '4', '5', '6', 'Min', 'Max', 'Brelan', 'Carré', 'Pte suite', 'Gde suite', 'Yams', 'Bonus', 'Total']
-    scores = pd.DataFrame(data=np.zeros((len(coups), len(player_names)), dtype=int), columns=player_names, index=coups)
-    return render_template('probas.html', dice_values=dice_values, player_names=player_names, coups=coups, scores=scores.to_html(classes=["table", "table-sm"], border=0, justify='left'))
+    return render_template('probas.html')
 
 def simulate_next_throw(selected_die, n_montecarlo=1000):
     die_to_throw = np.sum([s is None for s in selected_die])
