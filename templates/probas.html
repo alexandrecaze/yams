@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- Place your kit's code here -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </head>
+  <body>
+
+  <div class="container" style="margin-top:20px;">
+    <div class="row">
+      <div class="col border">
+        <div id=dieDiv></div>
+      </div>
+	
+      <div class="col border" id="probasTableDiv">
+	    </div>
+    </div>
+  </div>
+
+  <script>
+ 		var selectedDie = [null, null, null, null, null];
+
+    function updateProbas() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "/compute");
+        xhr.onload = function(evt) {
+            response = evt.target.response;
+            displayProbas(response);
+        };
+        xhr.send(JSON.stringify({selectedDie: selectedDie}));
+    }
+
+    function selectDie(diePosition, dieValue){
+    	if (selectedDie[diePosition] === dieValue) {
+    		selectedDie[diePosition] = null
+    	} else {
+    		selectedDie[diePosition] = dieValue
+    	}
+    	drawDie();
+    }
+
+    function displayProbas(results){
+    	var resultsDiv = document.getElementById("probasTableDiv");
+    	resultsDiv.innerHTML = JSON.parse(results)['df_probas'];
+    }
+
+    function drawDie() {
+  		var dieDiv = document.getElementById("dieDiv");
+      dieDiv.innerHTML = '';
+      var imageUrl = [
+      	'{{ url_for('static', filename='img/one.png') }}',
+      	'{{ url_for('static', filename='img/two.png') }}',
+      	'{{ url_for('static', filename='img/three.png') }}',
+      	'{{ url_for('static', filename='img/four.png') }}',
+      	'{{ url_for('static', filename='img/five.png') }}',
+      	'{{ url_for('static', filename='img/six.png') }}'
+      ];
+      var imageUrlBlue = [
+      	'{{ url_for('static', filename='img/one_b.png') }}',
+      	'{{ url_for('static', filename='img/two_b.png') }}',
+      	'{{ url_for('static', filename='img/three_b.png') }}',
+      	'{{ url_for('static', filename='img/four_b.png') }}',
+      	'{{ url_for('static', filename='img/five_b.png') }}',
+      	'{{ url_for('static', filename='img/six_b.png') }}'
+      ];
+      
+      for (var i=0; i < 5; i++){
+      	var div = document.createElement('div');
+	      for (var j = 0; j < imageUrl.length; j++) {
+	      	var img = document.createElement('img');
+	      	img.setAttribute('width', '60px');
+	      	if (selectedDie[i] == j) {
+		      	img.setAttribute('src', imageUrlBlue[j]);
+	      	} else {
+	      		img.setAttribute('src', imageUrl[j]);
+	      	}
+	      	img.dicePosition = i;
+	      	img.diceValue = j;
+	      	img.onclick = function() {
+       			selectDie(this.dicePosition, this.diceValue);
+            updateProbas();
+       		}
+		      div.appendChild(img);
+	      }
+	      dieDiv.appendChild(div);
+      }
+    }
+    drawDie();
+
+  </script>
+</html>
