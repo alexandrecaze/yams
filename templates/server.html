@@ -7,89 +7,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </head>
-
   <body>
 
   <div class="container" style="margin-top:20px;">
-  <div class="row">
-	<div class="col border">
-	  <div>
-	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-	      <label class="btn btn-secondary active">
-		<input type="radio" name="options" id="option1" autocomplete="off" checked> Round #1
-	      </label>
-	      <label class="btn btn-secondary">
-		<input type="radio" name="options" id="option2" autocomplete="off"> Round #2
-	      </label>
+    <div class="row">
+      <div class="col border">
+        <div id=dieDiv></div>
+      </div>
+	
+      <div class="col border" id="probasTableDiv">
 	    </div>
-	  </div>
-	  <div id=dieDiv></div>
-	  
-	  <div>
-	    <button onclick="onClickGoButton()" type="button" class="btn btn-link">Go</button>
-	  </div>
-
-	  <div id=resultsDiv></div>
-	</div>
-	<!-- end box 1 -->
-
-	<div class="col border" id="scoreTableDiv">
-	</div>
-	</div>
-
-  	<div class="row" style='text-align: center; margin-top: 20px; margin-bottom: 30px;'>
-			<div class="col">
-				<form action="#" id="newPlayerForm">
-					<input type="text" id="fname" name="fname">
-					<input type="button" value="Ajouter un joueur" onclick="addPlayer()">
-				</form>
-			</div>		
-		</div>
-	</div>
+    </div>
+  </div>
 
   <script>
-  	var players = [];
-  	var nextPlayerIndex = 0;
-  	var coups = ['1', '2', '3', '4', '5', '6', 'Min', 'Max', 'Brelan', 'Carré', 'Pte suite', 'Gde suite', 'Yams', 'Bonus', 'Total']
  		var selectedDie = [null, null, null, null, null];
 
- 		class Player {
- 			constructor(name) {
- 				this.name = name
- 				this.scores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
- 			}
- 		}
-
-  	function addPlayer() {
-  		var playerName = document.getElementById('fname').value;
-  		players.push(new Player(playerName));
-  		document.getElementById('fname').value = '';
-  		drawTable();
-  	}
-
-	  document.getElementById('newPlayerForm').addEventListener('submit', function(e) {
-	    addPlayer();
-	    e.preventDefault();
-		}, false);
-
-    function onClickGoButton() {
+    function updateProbas() {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "/compute");
         xhr.onload = function(evt) {
             response = evt.target.response;
-            console.log(response);
-            displayResults(response);
+            displayProbas(response);
         };
         xhr.send(JSON.stringify({selectedDie: selectedDie}));
-    }
-
-    function setNextPlayer(j) {
-    	nextPlayerIndex = j;
-    	drawTable();
-    }
-
-    function setScore(player, coup, value) {
-    	players[player].scores[coup] = Number(value);
     }
 
     function selectDie(diePosition, dieValue){
@@ -101,14 +42,9 @@
     	drawDie();
     }
 
-    function displayResults(results){
-    	var resultsDiv = document.getElementById("resultsDiv");
-    	resultsDiv.innerHTML = '';
-    	var yamsH3 = document.createElement('h3');
-    	results = JSON.parse(results);
-    	// yamsH3.innerHTML = 'Proba to get a Yams in one throw: ' + results['proba_yams_one_throw'].toFixed(2) + '%'
-    	yamsH3.innerHTML = 'Proba to get a Yams in one throw: 1 / ' + (100 / results['proba_yams_one_throw']).toFixed(0)
-    	resultsDiv.appendChild(yamsH3);
+    function displayProbas(results){
+    	var resultsDiv = document.getElementById("probasTableDiv");
+    	resultsDiv.innerHTML = JSON.parse(results)['df_probas'];
     }
 
     function drawDie() {
@@ -145,80 +81,13 @@
 	      	img.diceValue = j;
 	      	img.onclick = function() {
        			selectDie(this.dicePosition, this.diceValue);
+            updateProbas();
        		}
 		      div.appendChild(img);
 	      }
 	      dieDiv.appendChild(div);
       }
     }
-
-    function drawTable(){
-  		var tableDiv = document.getElementById("scoreTableDiv");
-      tableDiv.innerHTML = '';
-
-      if (players.length > 0) {
-        tbl = document.createElement('table');
-        tbl.classList.add('table');
-        tbl.classList.add('table-sm');
-        tbl.id = 'scoreTable';
-
-        // thead
-        thead = document.createElement('thead');
-        var tr = document.createElement('tr');
-        thead.appendChild(tr);
-        var th = document.createElement('th');
-        tr.appendChild(th);          
-        for (var j = 0; j < players.length; j++) {
-       		var th = document.createElement('th');
-       		th.playerId = j;
-       		if (nextPlayerIndex == j) {
-       			th.classList.add('bg-primary');
-       		}
-       		th.onclick = function() {
-       			setNextPlayer(this.playerId);
-       		}
-        	th.appendChild(document.createTextNode(players[j].name));
-        	tr.appendChild(th);
-        }
-        tbl.appendChild(thead);
-
-        // tbody
-        tbody = document.createElement('tbody');
-        for (var i = 0; i < coups.length; i++){
-          var tr = document.createElement('tr');
-          var th = document.createElement('th');
-          th.appendChild(document.createTextNode(coups[i]));
-          tr.appendChild(th);
-          for (var j = 0; j < players.length; j++){
-            var td = document.createElement('td');
-            var inputCellScore = document.createElement('input');
-       			inputCellScore.style = "border:0;"
-       			inputCellScore.value = players[j].scores[i];
-       			inputCellScore.playerId = j;
-       			inputCellScore.coupId = i;
-            if (nextPlayerIndex == j) {
-       				td.classList.add('bg-primary');
-       				inputCellScore.classList.add('bg-primary');
-       			}
-       			inputCellScore.addEventListener('keyup', function(event){
-       				if (event.key === 'Enter') {
-       					console.log(this.value);
-       					setScore(this.playerId, this.coupId, this.value);
-       				}
-       			})
-            td.appendChild(inputCellScore);
-            tr.appendChild(td);
-          }
-          tbody.appendChild(tr);
-        }
-        tbl.appendChild(tbody);
-        tableDiv.appendChild(tbl);
-    	} else {
-				tableDiv.appendChild(document.createTextNode('Ajoute des joueurs wesh'));
-    	}
-		}	    
-
-    drawTable();
     drawDie();
 
   </script>
