@@ -19,8 +19,8 @@ COUPS = {
 }
 
 @app.route('/')
-def hello_world():
-    return render_template('probas.html')
+def server():
+    return render_template('server.html')
 
 def simulate_next_throw(selected_die, n_montecarlo=1000):
     die_to_throw = np.sum([s is None for s in selected_die])
