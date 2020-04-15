@@ -21,6 +21,22 @@
   </div>
 
   <script>
+    var imageUrl = [
+      '{{ url_for('static', filename='img/one.png') }}',
+      '{{ url_for('static', filename='img/two.png') }}',
+      '{{ url_for('static', filename='img/three.png') }}',
+      '{{ url_for('static', filename='img/four.png') }}',
+      '{{ url_for('static', filename='img/five.png') }}',
+      '{{ url_for('static', filename='img/six.png') }}'
+    ];
+    var imageUrlBlue = [
+      '{{ url_for('static', filename='img/one_b.png') }}',
+      '{{ url_for('static', filename='img/two_b.png') }}',
+      '{{ url_for('static', filename='img/three_b.png') }}',
+      '{{ url_for('static', filename='img/four_b.png') }}',
+      '{{ url_for('static', filename='img/five_b.png') }}',
+      '{{ url_for('static', filename='img/six_b.png') }}'
+    ];
  		var selectedDie = [null, null, null, null, null];
 
     function updateProbas() {
@@ -50,22 +66,6 @@
     function drawDie() {
   		var dieDiv = document.getElementById("dieDiv");
       dieDiv.innerHTML = '';
-      var imageUrl = [
-      	'{{ url_for('static', filename='img/one.png') }}',
-      	'{{ url_for('static', filename='img/two.png') }}',
-      	'{{ url_for('static', filename='img/three.png') }}',
-      	'{{ url_for('static', filename='img/four.png') }}',
-      	'{{ url_for('static', filename='img/five.png') }}',
-      	'{{ url_for('static', filename='img/six.png') }}'
-      ];
-      var imageUrlBlue = [
-      	'{{ url_for('static', filename='img/one_b.png') }}',
-      	'{{ url_for('static', filename='img/two_b.png') }}',
-      	'{{ url_for('static', filename='img/three_b.png') }}',
-      	'{{ url_for('static', filename='img/four_b.png') }}',
-      	'{{ url_for('static', filename='img/five_b.png') }}',
-      	'{{ url_for('static', filename='img/six_b.png') }}'
-      ];
       
       for (var i=0; i < 5; i++){
       	var div = document.createElement('div');
