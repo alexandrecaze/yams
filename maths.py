@@ -25,16 +25,36 @@ def simulate_next_throw(selected_die, n_montecarlo=1000):
 def compute_probas(selected_die):
     next_throw_simulations = simulate_next_throw(selected_die, 10000)
     successes = check_for_success(next_throw_simulations)
-    df_probas = pd.DataFrame({'coups': list(COUPS.keys()), 'proba': successes.mean(axis=0)})
+    df_probas = pd.DataFrame({'coups': list(COUPS.keys()), 'proba': np.around(successes.mean(axis=0), decimals=2)})
     # TODO : Move calcul des points dans check_for_success (pour calculer brelan et square et min et max)
-    # df_probas['points'] = df_probas['coups'].map(COUPS)
     df_probas['points'] = compute_points(next_throw_simulations, successes)
+#    df_probas['points'] = df_probas['coups'].map(COUPS)
     df_probas['esperance'] = df_probas['proba'] * df_probas['points']
     return df_probas[df_probas.proba>0].sort_values(by='esperance', ascending=False)
 
-def compute_points(throws, successes)
-    # TODO multiply number of points by successes for each throw
-    pass
+
+def compute_points(throws, successes):
+    scores = np.zeros((throws.shape[0], 36))
+    fin_score = np.zeros(36)
+
+    for x in range(6):
+        scores[:, x * 5] = (x + 1) * successes[:, x * 5]
+        scores[:, x * 5 + 1] = 2 * (x + 1) * successes[:, x * 5 + 1]
+        scores[:, x * 5 + 2] = 3 * (x + 1) * successes[:, x * 5 + 2]
+        scores[:, x * 5 + 3] = 4 * (x + 1) * successes[:, x * 5 + 3]
+        scores[:, x * 5 + 4] = 5 * (x + 1) * successes[:, x * 5 + 4]
+    scores[:, 30] = 30 * successes[:, 30]
+    scores[:, 31] = 40 * successes[:, 31]
+    scores[:, 33] = 25 * successes[:, 33]
+    scores[:, 35] = 50 * successes[:, 35]
+    for x in range(throws.shape[0]):
+        scores[x, 32] = throws[x].sum() * successes[x, 32]
+        scores[x, 34] = throws[x].sum() * successes[x, 34]
+    for x in range(36):
+        if successes[:, x].sum() != 0:
+            fin_score[x] = round((scores[:, x].sum() / successes[:, x].sum()), 1)
+    return fin_score
+
 
 def check_for_success(throws):
     df_throws = pd.DataFrame(throws)
